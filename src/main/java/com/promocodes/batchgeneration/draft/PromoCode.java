@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Draft {
+public class PromoCode {
 
     @Id
     @GeneratedValue

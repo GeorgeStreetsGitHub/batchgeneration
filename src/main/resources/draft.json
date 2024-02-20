@@ -1,0 +1,16 @@
+{
+  "draft": {
+    "maxRedemptionLimit": 1,
+    "totalCount": 100,
+    "campaignDescription": "display promo Description",
+    "thirdPartyDetail": "Disney",
+    "promotionCodeType": "SINGLE_USE",
+    "definitionTemplate": {
+      "length": 30,
+      "delimitLength": 5,
+      "prefix": "DSNY"
+    },
+    "offerId": "65c669ff5-9fde-4e12-9b2f-f6ba7e461f43"
+  },
+  "versionedBy": "BOS1234"
+}
