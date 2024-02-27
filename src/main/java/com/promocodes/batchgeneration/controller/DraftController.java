@@ -1,4 +1,4 @@
-package com.promocodes.batchgeneration.draft;
+package com.promocodes.batchgeneration.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;

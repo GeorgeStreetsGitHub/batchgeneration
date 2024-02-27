@@ -1,4 +1,4 @@
-package com.promocodes.batchgeneration.draft;
+package com.promocodes.batchgeneration.draftdb;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
