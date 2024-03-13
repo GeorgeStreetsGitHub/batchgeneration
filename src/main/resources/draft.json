@@ -1,16 +1,16 @@
 {
   "draft": {
-    "maxRedemptionLimit": 1,
-    "totalCount": 159,
-    "campaignDescription": "display promo Description",
-    "thirdPartyDetail": "Disney",
+    "maxRedemptionLimit":1,
+    "totalCount":500,
+    "campaignDescription":"Kafka Message for Testing Purposes",
+    "thirdPartyDetail": "Detail of 3rd party",
     "promotionCodeType": "SINGLE_USE",
     "definitionTemplate": {
       "length": 30,
       "delimitLength": 5,
-      "prefix": "DSNY"
+      "prefix": "TEST"
     },
-    "offerId": "65c669ff5-9fde-4e12-9b2f-f6ba7e461f43"
+    "offerId": "65c669ff5-9fde-4e12-9b2f-f6ba7e461f43-1"
   },
-  "versionedBy": "BOS1234"
+  "versionedBy": ""
 }

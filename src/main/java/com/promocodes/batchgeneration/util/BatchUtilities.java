@@ -1,27 +1,22 @@
 package com.promocodes.batchgeneration.util;
 
+import com.kafka.broker.payload.Draft;
 import com.opencsv.CSVWriter;
+import com.promocodes.batchgeneration.BatchGenerationApplication;
 import com.promocodes.batchgeneration.draftdb.PromoCodeEntity;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.protocol.Message;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
-import java.util.Collections;
-import java.util.Properties;
+import java.net.URL;
 
 public class BatchUtilities {
 
@@ -44,13 +39,79 @@ public class BatchUtilities {
         }
     }*/
 
+    public static void createEmptyJsonDraft(){
+
+      /*  try{
+
+            File draftJson = new File("src/main/resources/draft.json");
+            if (!draftJson.createNewFile()) {
+                System.out.println("File already exists");
+            }else{
+                FileWriter fileWriter = new FileWriter(draftJson);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                bufferedWriter.write("{\n" +
+                        "  \"draft\": {\n" +
+                        "    \"maxRedemptionLimit\": 0,\n" +
+                        "    \"totalCount\": 0,\n" +
+                        "    \"campaignDescription\": \"\",\n" +
+                        "    \"thirdPartyDetail\": \"\",\n" +
+                        "    \"promotionCodeType\": \"\",\n" +
+                        "    \"definitionTemplate\": {\n" +
+                        "      \"length\": 1 ,\n" +
+                        "      \"delimitLength\": 1,\n" +
+                        "      \"prefix\": \"\"\n" +
+                        "    },\n" +
+                        "    \"offerId\": \"\"\n" +
+                        "  },\n" +
+                        "  \"versionedBy\": \"\"\n" +
+                        "}");
+                bufferedWriter.newLine();
+                bufferedWriter.close();
+            }
+
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
+
+    }
+
+
+    public static void createJsonDraft(Draft draft) {
+       try{
+            FileWriter fileWriter = new FileWriter("src/main/resources/draft.json");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write("{\n" +
+                    "  \"draft\": {\n" +
+                    "    \"maxRedemptionLimit\":"+draft.getMaxRedemptionLimit()+",\n" +
+                    "    \"totalCount\":"+draft.getTotalCount()+",\n" +
+                    "    \"campaignDescription\":\""+draft.getCampaignDescription()+"\",\n" +
+                    "    \"thirdPartyDetail\": \""+draft.getThirdPartyDetail()+"\",\n" +
+                    "    \"promotionCodeType\": \""+draft.getPromotionCodeType()+"\",\n" +
+                    "    \"definitionTemplate\": {\n" +
+                    "      \"length\": "+draft.getDefinitionTemplate().getLength()+",\n" +
+                    "      \"delimitLength\": "+draft.getDefinitionTemplate().getDelimitLength()+",\n" +
+                    "      \"prefix\": \""+draft.getDefinitionTemplate().getPrefix()+"\"\n" +
+                    "    },\n" +
+                    "    \"offerId\": \""+draft.getOfferId()+"\"\n" +
+                    "  },\n" +
+                    "  \"versionedBy\": \"\"\n" +
+                    "}");
+            bufferedWriter.newLine();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static LineMapper<PromoCodeEntity> lineMapper(){
         DefaultLineMapper<PromoCodeEntity> lineMapper = new DefaultLineMapper<>();
 
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setDelimiter(",");
         lineTokenizer.setStrict(false);
-        lineTokenizer.setNames("id", "name");
+        lineTokenizer.setNames("name");
 
         BeanWrapperFieldSetMapper<PromoCodeEntity> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(PromoCodeEntity.class);
@@ -63,18 +124,17 @@ public class BatchUtilities {
 
     public static boolean createPromoCodes(int totalCount, int length, int delimit, String prefix){
 
-        String filePath = "src/main/resources/drafts.csv";
-
+        String filePath = "src/main/resources/promocodes.csv";
+        System.out.println("    * CREATING PROMO CODES");
         try(CSVWriter csvWriter = new CSVWriter(
                 new FileWriter(filePath))) {
             String[] promoCodes = new String[totalCount];
-            String[] header = {"id", "promo-code"};
+            String[] header = {"PromoCodeTag","promo-code"};
             csvWriter.writeNext(header);
             int id = 1;
             for(int i=0; i< promoCodes.length; i++){
                 promoCodes[i] = prefix+randomPromoCode(length,delimit);
-                String[] row = {String.valueOf(id),promoCodes[i]};
-                id++;
+                String[] row = {promoCodes[i]};
                 csvWriter.writeNext(row);
 
             }
@@ -100,4 +160,6 @@ public class BatchUtilities {
 
         return String.valueOf(promoCode);
     }
+
+
 }
